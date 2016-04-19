@@ -51,7 +51,21 @@
    expand_variables="y"
    match="Also here: *"
    omit_from_output="y"
+   omit_from_log="y"
    script="colorfyInRoomMobs"
+   send_to="12"
+   sequence="100"
+  >
+  </trigger>
+
+  <!--  Objects on the ground -->
+  <trigger
+   enabled="y"
+   expand_variables="y"
+   match="* You notice *"
+   omit_from_output="y"
+   omit_from_log="y"
+   script="colorfyInRoomObjects"
    send_to="12"
    sequence="100"
   >
@@ -63,6 +77,7 @@
    expand_variables="y"
    match="There looks like * to the *."
    omit_from_output="y"
+   omit_from_log="y"
    send_to="12"
    sequence="100"
   >
@@ -79,6 +94,7 @@ AnsiNote(b_white.."There looks like "..ncolor.."%1"..b_white.." to the %2.")
    enabled="y"
    match="This looks like a good spot for *."
    omit_from_output="y"
+   omit_from_log="y"
    send_to="12"
    sequence="100"
   >
@@ -108,8 +124,8 @@ AnsiNote(b_white.."This looks like a good spot for "..ncolor.."%1"..b_white)
    group="ColorfyEq"
    send_to="12"
    sequence="100"
-   omit_from_log="y"
    omit_from_output="y"
+   omit_from_log="y"
    script="GrabEQItem"
   >
   </trigger>
@@ -143,8 +159,8 @@ AnsiNote(b_white.."This looks like a good spot for "..ncolor.."%1"..b_white)
    group="ColorfyInv"
    send_to="12"
    sequence="100"
-   omit_from_log="y"
    omit_from_output="y"
+   omit_from_log="y"
    script="GrabInvItem"
   >
   </trigger>
@@ -278,7 +294,8 @@ function get256ColorFromObject(objectString, default)
         eqcol = "white"
     elseif (string.find(objString,"grey") ~= nil) then
         eqcol = "darkgray"
-    -- Now, look for a metal
+
+    -- Now, look for the metals
     elseif (string.find(objString,"bronze") ~= nil) then
         eqcol = "gold"
     elseif (string.find(objString,"copper") ~= nil) then
@@ -289,10 +306,14 @@ function get256ColorFromObject(objectString, default)
         eqcol = "#045CFF"
     elseif (string.find(objString,"lead") ~= nil) then
         eqcol = "powderblue"
+    elseif (string.find(objString,"steel") ~= nil) then
+        eqcol = "steelblue"
 
     -- Look for leather first.
     elseif (string.find(objString,"leather") ~= nil) then
         eqcol = "brown"
+
+    -- Resources --
 
     -- Cloth & Hides (includes crafting materials
     elseif (string.find(objString,"hide") ~= nil
@@ -322,194 +343,189 @@ function get256ColorFromObject(objectString, default)
          or string.find(objString,"straw") ~= nil) then
         eqcol = "#CD853F"
 
+    -- cooking
+    elseif (string.find(objString,"salt") ~= nil) then
+        eqcol = "white"
 
-    -- Resources
-    elseif (string.find(objString,"a bundle of") ~= nil or string.find(objString,"some ") ~= nil or string.find(objString,"strip of") ~= nil) then
+    -- dark wood
+    elseif (string.find(objString,"wood") ~= nil    -- Cherrywood, Beechwood, Redwood, Applewood, Silverwood
+         or string.find(objString,"yew") ~= nil
+         or string.find(objString,"teak") ~= nil
+         or string.find(objString,"elm") ~= nil
+         or string.find(objString,"sycamore") ~= nil
+         or string.find(objString,"mesquite") ~= nil
+         or string.find(objString,"walnut") ~= nil
+         or string.find(objString,"chestnut") ~= nil
+         or string.find(objString,"mahogany") ~= nil
+         or string.find(objString,"poplar") ~= nil
+         or string.find(objString,"osage") ~= nil
+         or string.find(objString,"ebony") ~= nil
+         or string.find(objString,"oak") ~= nil) then
+        eqcol = "#894821"
 
-        -- cooking
-        if (string.find(objString,"salt") ~= nil) then
-            eqcol = "white"
+    -- light wood
+    elseif (string.find(objString,"birch") ~= nil
+         or string.find(objString,"fir") ~= nil
+         or string.find(objString,"bamboo") ~= nil
+         or string.find(objString,"balsa") ~= nil
+         or string.find(objString,"pine") ~= nil
+         or string.find(objString,"hickory") ~= nil
+         or string.find(objString,"willow") ~= nil
+         or string.find(objString,"spruce") ~= nil
+         or string.find(objString,"cypress") ~= nil
+         or string.find(objString,"cedar") ~= nil
+         or string.find(objString,"maple") ~= nil) then
+        eqcol = "burlywood"
 
-        -- dark wood
-        elseif (string.find(objString,"wood") ~= nil    -- Cherrywood, Beechwood, Redwood, Applewood, Silverwood
-             or string.find(objString,"yew") ~= nil
-             or string.find(objString,"teak") ~= nil
-             or string.find(objString,"elm") ~= nil
-             or string.find(objString,"sycamore") ~= nil
-             or string.find(objString,"mesquite") ~= nil
-             or string.find(objString,"walnut") ~= nil
-             or string.find(objString,"chestnut") ~= nil
-             or string.find(objString,"mahogany") ~= nil
-             or string.find(objString,"poplar") ~= nil
-             or string.find(objString,"osage") ~= nil
-             or string.find(objString,"ebony") ~= nil
-             or string.find(objString,"oak") ~= nil) then
-            eqcol = "#894821"
+    -- Gems/precious stone
+    elseif (string.find(objString,"ruby") ~= nil) then
+        eqcol = "red"
+    elseif (string.find(objString,"sapphire") ~= nil) then
+        eqcol = "cornflowerblue"
+    elseif (string.find(objString,"cmerald") ~= nil) then
+        eqcol = "springgreen"
+    elseif (string.find(objString,"agate") ~= nil) then
+        eqcol = "#FF80C0"
+    elseif (string.find(objString,"diamond") ~= nil) then
+        eqcol = "lightcyan"
+    elseif (string.find(objString,"pearl") ~= nil) then
+        eqcol = "palegoldenrod"
+    elseif (string.find(objString,"opal") ~= nil) then
+        eqcol = "#48D1CC"
+    elseif (string.find(objString,"amethyst") ~= nil) then
+        eqcol = "#BA55D3"
+    elseif (string.find(objString,"topaz") ~= nil) then
+        eqcol = "#FF7F50"
+    elseif (string.find(objString,"garnet") ~= nil) then
+        eqcol = "#FA8072"
+    elseif (string.find(objString,"amber") ~= nil) then
+        eqcol = "#FFA500"
+    elseif (string.find(objString,"onyx") ~= nil) then
+        eqcol = "#696969"
+    elseif (string.find(objString,"turquoise") ~= nil) then
+        eqcol = "#40E0D0"
+    elseif (string.find(objString,"peridot") ~= nil) then
+        eqcol = "#7FFF00"
+    elseif (string.find(objString,"quartz") ~= nil) then
+        eqcol = "#FAFAD2"
+    elseif (string.find(objString,"lapis") ~= nil) then
+        eqcol = "#4169E1"
+    elseif (string.find(objString,"bloodstone") ~= nil) then
+        eqcol = "red"
+    elseif (string.find(objString,"moonstone") ~= nil) then
+        eqcol = "#AFEEEE"
+    elseif (string.find(objString,"sunstone") ~= nil) then
+        eqcol = "#F4AF60"
+    elseif (string.find(objString,"aquamarine") ~= nil) then
+        eqcol = "#40E0D0"
+    elseif (string.find(objString,"citrine") ~= nil) then
+        eqcol = "#FFA500"
+    elseif (string.find(objString,"jade") ~= nil) then
+        eqcol = "#8DBC8F"
 
-        -- light wood
-        elseif (string.find(objString,"birch") ~= nil
-             or string.find(objString,"fir") ~= nil
-             or string.find(objString,"bamboo") ~= nil
-             or string.find(objString,"balsa") ~= nil
-             or string.find(objString,"pine") ~= nil
-             or string.find(objString,"hickory") ~= nil
-             or string.find(objString,"willow") ~= nil
-             or string.find(objString,"spruce") ~= nil
-             or string.find(objString,"cypress") ~= nil
-             or string.find(objString,"cedar") ~= nil
-             or string.find(objString,"maple") ~= nil) then
-            eqcol = "burlywood"
+    -- Stone and Bone
+    elseif (string.find(objString,"bone") ~= nil
+         or string.find(objString,"ivory") ~= nil
+         or string.find(objString,"limestone") ~= nil
+         or string.find(objString,"marble") ~= nil) then
+        eqcol = "#FFE4C4"
 
-        -- Gems/precious stone
-        elseif (string.find(objString,"ruby") ~= nil) then
-            eqcol = "red"
-        elseif (string.find(objString,"sapphire") ~= nil) then
-            eqcol = "cornflowerblue"
-        elseif (string.find(objString,"cmerald") ~= nil) then
-            eqcol = "springgreen"
-        elseif (string.find(objString,"agate") ~= nil) then
-            eqcol = "#FF80C0"
-        elseif (string.find(objString,"diamond") ~= nil) then
-            eqcol = "lightcyan"
-        elseif (string.find(objString,"pearl") ~= nil) then
-            eqcol = "palegoldenrod"
-        elseif (string.find(objString,"opal") ~= nil) then
-            eqcol = "#48D1CC"
-        elseif (string.find(objString,"amethyst") ~= nil) then
-            eqcol = "#BA55D3"
-        elseif (string.find(objString,"topaz") ~= nil) then
-            eqcol = "#FF7F50"
-        elseif (string.find(objString,"garnet") ~= nil) then
-            eqcol = "#FA8072"
-        elseif (string.find(objString,"amber") ~= nil) then
-            eqcol = "#FFA500"
-        elseif (string.find(objString,"onyx") ~= nil) then
-            eqcol = "#696969"
-        elseif (string.find(objString,"turquoise") ~= nil) then
-            eqcol = "#40E0D0"
-        elseif (string.find(objString,"peridot") ~= nil) then
-            eqcol = "#7FFF00"
-        elseif (string.find(objString,"quartz") ~= nil) then
-            eqcol = "#FAFAD2"
-        elseif (string.find(objString,"lapis") ~= nil) then
-            eqcol = "#4169E1"
-        elseif (string.find(objString,"bloodstone") ~= nil) then
-            eqcol = "red"
-        elseif (string.find(objString,"moonstone") ~= nil) then
-            eqcol = "#AFEEEE"
-        elseif (string.find(objString,"sunstone") ~= nil) then
-            eqcol = "#F4AF60"
-        elseif (string.find(objString,"aquamarine") ~= nil) then
-            eqcol = "#40E0D0"
-        elseif (string.find(objString,"citrine") ~= nil) then
-            eqcol = "#FFA500"
-        elseif (string.find(objString,"jade") ~= nil) then
-            eqcol = "#8DBC8F"
+    elseif (string.find(objString,"sand") ~= nil
+         or string.find(objString,"sandstone") ~= nil
+         or string.find(objString,"pumice") ~= nil
+         or string.find(objString,"granite") ~= nil
+         or string.find(objString,"porcelain") ~= nil) then
+        eqcol = "#EEE8AA"
 
-        -- Stone and Bone
-        elseif (string.find(objString,"bone") ~= nil
-             or string.find(objString,"ivory") ~= nil
-             or string.find(objString,"limestone") ~= nil
-             or string.find(objString,"marble") ~= nil) then
-            eqcol = "#FFE4C4"
+    elseif (string.find(objString,"stone") ~= nil) then
+        eqcol = "#808080"
+    elseif (string.find(objString,"dragonbane") ~= nil) then
+        eqcol = "goldenrod"
 
-        elseif (string.find(objString,"sand") ~= nil
-             or string.find(objString,"sandstone") ~= nil
-             or string.find(objString,"pumice") ~= nil
-             or string.find(objString,"granite") ~= nil
-             or string.find(objString,"porcelain") ~= nil) then
-            eqcol = "#EEE8AA"
+    elseif (string.find(objString,"shale") ~= nil
+         or string.find(objString,"basalt") ~= nil
+         or string.find(objString,"soapstone") ~= nil
+         or string.find(objString,"flint") ~= nil) then
+        eqcol = "#696969"
+    elseif (string.find(objString,"coal") ~= nil
+         or string.find(objString,"obsidian") ~= nil) then
+        eqcol = "dimgray"
+    elseif (string.find(objString,"clay") ~= nil) then
+        eqcol = "brown"
 
-        elseif (string.find(objString,"stone") ~= nil) then
-            eqcol = "darkgray"
-        elseif (string.find(objString,"dragonbane") ~= nil) then
-            eqcol = "goldenrod"
+    -- Fruit
+    elseif (string.find(objString,"apples") ~= nil
+         or string.find(objString,"cranberries") ~= nil
+         or string.find(objString,"strawberries") ~= nil
+         or string.find(objString,"tomatoes") ~= nil
+         or string.find(objString,"rapsberries") ~= nil
+         or string.find(objString,"cherries") ~= nil) then
+        eqcol = "red"
+    elseif (string.find(objString,"grapes") ~= nil
+         or string.find(objString,"boysenberries") ~= nil) then
+        eqcol = "#9400D3"
+    elseif (string.find(objString,"blackberries") ~= nil
+         or string.find(objString,"figs") ~= nil
+         or string.find(objString,"plums") ~= nil
+         or string.find(objString,"dates") ~= nil
+         or string.find(objString,"blueberries") ~= nil) then
+        eqcol = "#4B0082"
+    elseif (string.find(objString,"pears") ~= nil) then
+        eqcol = "#228B22"
+    elseif (string.find(objString,"bananas") ~= nil) then
+        eqcol = "#FFD700"
+    elseif (string.find(objString,"coconuts") ~= nil
+          or string.find(objString,"pineapples") ~= nil) then
+        eqcol = "#B8860B"
+    elseif (string.find(objString,"lemons") ~= nil) then
+        eqcol = "#FFFF00"
+    elseif (string.find(objString,"limes") ~= nil) then
+        eqcol = "#7FFF00"
+    elseif (string.find(objString,"peaches") ~= nil
+         or string.find(objString,"apricots") ~= nil) then
+        eqcol = "#FFA500"
 
-        elseif (string.find(objString,"shale") ~= nil
-             or string.find(objString,"basalt") ~= nil
-             or string.find(objString,"soapstone") ~= nil
-             or string.find(objString,"flint") ~= nil) then
-            eqcol = "#808080"
-        elseif (string.find(objString,"coal") ~= nil
-             or string.find(objString,"obsidian") ~= nil) then
-            eqcol = "dimgray"
-        elseif (string.find(objString,"clay") ~= nil) then
-            eqcol = "brown"
+    -- Vegetables
+    elseif (string.find(objString,"beans") ~= nil
+         or string.find(objString,"greens") ~= nil
+         or string.find(objString,"okra") ~= nil
+         or string.find(objString,"peas") ~= nil
+         or string.find(objString,"lettuce") ~= nil
+         or string.find(objString,"spinach") ~= nil
+         or string.find(objString,"bell peppers") ~= nil
+         or string.find(objString,"cabbage") ~= nil) then
+        eqcol = "#008800"
+    elseif (string.find(objString,"corn") ~= nil) then
+        eqcol = "#FFFF80"
+    elseif (string.find(objString,"carrots") ~= nil) then
+        eqcol = "#FF8C00"
+    elseif (string.find(objString,"onions") ~= nil
+         or string.find(objString,"leeks") ~= nil) then
+        eqcol = "#98FB98"
+    elseif (string.find(objString,"hot peppers") ~= nil
+         or string.find(objString,"beets") ~= nil
+         or string.find(objString,"turnips") ~= nil) then
+        eqcol = "red"
+    elseif (string.find(objString,"olives") ~= nil) then
+        eqcol = "#6B8E23"
+    elseif (string.find(objString,"mushrooms") ~= nil
+         or string.find(objString,"potatoes") ~= nil) then
+        eqcol = "#B8860B"
 
-        -- Fruit
-        elseif (string.find(objString,"apples") ~= nil
-             or string.find(objString,"cranberries") ~= nil
-             or string.find(objString,"strawberries") ~= nil
-             or string.find(objString,"tomatoes") ~= nil
-             or string.find(objString,"rapsberries") ~= nil
-             or string.find(objString,"cherries") ~= nil) then
-            eqcol = "red"
-        elseif (string.find(objString,"grapes") ~= nil
-             or string.find(objString,"boysenberries") ~= nil) then
-            eqcol = "#9400D3"
-        elseif (string.find(objString,"blackberries") ~= nil
-             or string.find(objString,"figs") ~= nil
-             or string.find(objString,"plums") ~= nil
-             or string.find(objString,"dates") ~= nil
-             or string.find(objString,"blueberries") ~= nil) then
-            eqcol = "#4B0082"
-        elseif (string.find(objString,"pears") ~= nil) then
-            eqcol = "#228B22"
-        elseif (string.find(objString,"bananas") ~= nil) then
-            eqcol = "#FFD700"
-        elseif (string.find(objString,"coconuts") ~= nil
-              or string.find(objString,"pineapples") ~= nil) then
-            eqcol = "#B8860B"
-        elseif (string.find(objString,"lemons") ~= nil) then
-            eqcol = "#FFFF00"
-        elseif (string.find(objString,"limes") ~= nil) then
-            eqcol = "#7FFF00"
-        elseif (string.find(objString,"peaches") ~= nil
-             or string.find(objString,"apricots") ~= nil) then
-            eqcol = "#FFA500"
-
-        -- Vegetables
-        elseif (string.find(objString,"beans") ~= nil
-             or string.find(objString,"greens") ~= nil
-             or string.find(objString,"okra") ~= nil
-             or string.find(objString,"peas") ~= nil
-             or string.find(objString,"lettuce") ~= nil
-             or string.find(objString,"spinach") ~= nil
-             or string.find(objString,"bell peppers") ~= nil
-             or string.find(objString,"cabbage") ~= nil) then
-            eqcol = "#008800"
-        elseif (string.find(objString,"corn") ~= nil) then
-            eqcol = "#FFFF80"
-        elseif (string.find(objString,"carrots") ~= nil) then
-            eqcol = "#FF8C00"
-        elseif (string.find(objString,"onions") ~= nil
-             or string.find(objString,"leeks") ~= nil) then
-            eqcol = "#98FB98"
-        elseif (string.find(objString,"hot peppers") ~= nil
-             or string.find(objString,"beets") ~= nil
-             or string.find(objString,"turnips") ~= nil) then
-            eqcol = "red"
-        elseif (string.find(objString,"olives") ~= nil) then
-            eqcol = "#6B8E23"
-        elseif (string.find(objString,"mushrooms") ~= nil
-             or string.find(objString,"potatoes") ~= nil) then
-            eqcol = "#B8860B"
-
-        -- Meat... yeah, we'll leave that as whatever the player chose.
-        -- Spices, herbs, & grain...
-        -- Misc. Food & Drink...
-        -- Misc. Resources (vellum, paper, etc)
-
-        end
+    -- Meat... yeah, we'll leave that as whatever the player chose.
+    -- Spices, herbs, & grain...
+    -- Misc. Food & Drink...
+    -- Misc. Resources (vellum, paper, etc)
 
     end
+
 
     return eqcol
 end
 
 
 -------------------------------
---  Mobs
+--  Mobs (Players)
 -------------------------------
 function colorfyInRoomMobs(rName, rLine, rWildcards, rStyles)
 
@@ -551,6 +567,69 @@ function colorfyInRoomMobs(rName, rLine, rWildcards, rStyles)
 
     AnsiNote(outStr)
 end
+
+
+-------------------------------
+--  Items on the ground
+-------------------------------
+function colorfyInRoomObjects(rName, rLine, rWildcards, rStyles)
+    local firstTime = true
+
+    -- OK, this is, essentially, a non-function right now.
+    -- What we are going to have to do is this:
+    --      * Grab the color of the room
+    --      * Strip off the rLine before the "You notice" line
+    --      * AnsiTell that color/text
+    --      * For everything after that, split on the commas
+    --      * Colorfy each object and ColourTell on that
+
+    -- Get the colors
+    local style = rStyles[1]
+    local roomCol = name_colours[style.textcolour]
+    local defaultObjectCol = name_colours[style.textcolour]
+    if (rStyles[2] ~= nil) then
+        defaultObjectCol = name_colours[rStyles[2].textcolour]
+    end
+
+    local PATTERN = " You notice "
+    local startRoomIndx, endRoomIndex = rLine:find(PATTERN)
+
+    -- UGH!  I hate this, but if the room desc has a "You notice" in it, 
+    -- we have to skip that one.
+    local nextStart, nextIndx = string.find(rLine:sub(endRoomIndex), PATTERN)
+    while nextIndx ~= nil do
+        endRoomIndex = nextIndx
+        startRoomIndx = nextStart
+        local nextStart, nextIndx = string.find(rLine:sub(endRoomIndex), PATTERN)
+    end
+    
+    ColourTell(roomCol,"",rLine:sub(1,startRoomIndx-1))
+    ColourTell(defaultObjectCol,"",rLine:sub(startRoomIndx,endRoomIndex))
+
+    local objectList = rLine:sub(endRoomIndex+1)
+
+    local objectColor = defaultObjectCol
+    local firstItem = true
+    for objItem in objectList:gmatch("[^,]+") do
+    
+        if (firstItem == false) then
+            ColourTell(objectColor, "", ",")
+        end
+        firstItem = false
+
+        if (objItem:find("^ and ")) then
+            objItem = objItem:sub(5)
+            ColourTell(roomCol,""," and")
+            lastitem = true
+        end
+
+        objectColor = get256ColorFromObject(objItem, defaultObjectCol)
+        ColourTell(objectColor, "", objItem)
+    end
+
+    Note("") -- Terminate the line and send it to the mud..
+end
+
 
 -------------------------------
 --  Equipment
