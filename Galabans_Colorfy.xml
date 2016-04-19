@@ -23,6 +23,8 @@
 <!--  Triggers  -->
 
 <triggers>
+
+  <!-- Mining / foraging -->
   <trigger
    custom_colour="7"
    enabled="y"
@@ -30,6 +32,7 @@
    sequence="100"
   >
   </trigger>
+
   <trigger
    custom_colour="15"
    enabled="y"
@@ -41,6 +44,15 @@
    custom_colour="15"
    enabled="y"
    match="You have found some *"
+   sequence="100"
+  >
+  </trigger>
+
+  <!-- Crafting -->
+  <trigger
+   custom_colour="7"
+   enabled="y"
+   match="You mess up *"
    sequence="100"
   >
   </trigger>
