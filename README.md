@@ -2,6 +2,7 @@
 This is a simple plugin for the Shattered Isles mud to add more color to the mud.  To use this plugin, simply install it and the world will become more colorful.
 
 Examples:
+
      * Colored equipment will be colored the appropriate color
      * Successful attempts will turn green, unsuccessful red
      * Players within the room will show up a different color than NPCs
