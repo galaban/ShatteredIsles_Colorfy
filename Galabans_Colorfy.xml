@@ -286,7 +286,7 @@ function get256ColorFromObject(objectString, default)
     local eqcol = default
 
     -- First, go through all the actual colors
-    if (string.find(objString,"red") ~= nil) then
+    if (string.find(objString," red ") ~= nil) then
         eqcol = "red"
     elseif (string.find(objString,"orange") ~= nil) then
         eqcol = "#FF8C00"
@@ -294,21 +294,23 @@ function get256ColorFromObject(objectString, default)
         eqcol = "green"
     elseif (string.find(objString,"yellow") ~= nil) then
         eqcol = "yellow"
-    elseif (string.find(objString,"blue") ~= nil) then
+    elseif (string.find(objString," blue ") ~= nil) then
         eqcol = "blue"
     elseif (string.find(objString,"purple") ~= nil) then
         eqcol = "#9400D3"
-    elseif (string.find(objString,"brown") ~= nil) then
+    elseif (string.find(objString,"brown ") ~= nil) then
         eqcol = "#8B4513"
-    elseif (string.find(objString,"black") ~= nil) then
+    elseif (string.find(objString,"black ") ~= nil) then
         eqcol = "dimgray"
-    elseif (string.find(objString,"white") ~= nil) then
+    elseif (string.find(objString," white ") ~= nil) then
         eqcol = "white"
-    elseif (string.find(objString,"grey") ~= nil) then
+    elseif (string.find(objString," grey ") ~= nil) then
         eqcol = "darkgray"
 
-    -- Now, look for the metals
-    elseif (string.find(objString,"bronze") ~= nil) then
+    -- Metals
+    elseif (string.find(objString,"bronze") ~= nil
+         or string.find(objString,"brass") ~= nil
+         or string.find(objString,"orichalcum") ~= nil) then
         eqcol = "gold"
     elseif (string.find(objString,"copper") ~= nil) then
         eqcol = "chocolate"
@@ -316,10 +318,26 @@ function get256ColorFromObject(objectString, default)
         eqcol = "yellow"
     elseif (string.find(objString,"cobalt") ~= nil) then
         eqcol = "#045CFF"
-    elseif (string.find(objString,"lead") ~= nil) then
+    elseif (string.find(objString,"lead ") ~= nil) then
         eqcol = "powderblue"
-    elseif (string.find(objString,"steel") ~= nil) then
+    elseif (string.find(objString," steel ") ~= nil   
+         or string.find(objString,"crudesteel") ~= nil
+         or string.find(objString,"arcsilver") ~= nil) then
         eqcol = "steelblue"
+    elseif (string.find(objString,"persarium") ~= nil) then
+        eqcol = "#FFDEAD"
+    elseif (string.find(objString,"pewter") ~= nil
+         or string.find(objString,"nickel") ~= nil
+         or string.find(objString,"zinc") ~= nil
+         or string.find(objString," tin ") ~= nil
+         or string.find(objString,"platinum") ~= nil) then
+        eqcol = "silver"
+    elseif (string.find(objString,"niello") ~= nil
+         or string.find(objString," iron ") ~= nil
+         or string.find(objString,"blacksteel") ~= nil) then
+        eqcol = "#808080"
+    elseif (string.find(objString,"electrum") ~= nil) then
+        eqcol = "#D0D080"
 
     -- Look for leather first.
     elseif (string.find(objString,"leather") ~= nil) then
@@ -329,11 +347,12 @@ function get256ColorFromObject(objectString, default)
 
     -- Cloth & Hides (includes crafting materials
     elseif (string.find(objString,"hide") ~= nil
-         or string.find(objString,"fur") ~= nil) then
+         or string.find(objString," fur ") ~= nil) then
         eqcol = "brown"
     elseif (string.find(objString,"snakeskin") ~= nil
          or string.find(objString,"hemp") ~= nil
          or string.find(objString,"vine") ~= nil
+         or string.find(objString,"herbs") ~= nil
          or string.find(objString,"scale") ~= nil) then  --scales, dragonscale
         eqcol = "green"
     elseif (string.find(objString,"wool") ~= nil
@@ -345,7 +364,7 @@ function get256ColorFromObject(objectString, default)
          or string.find(objString,"cashmere") ~= nil
          or string.find(objString,"brocade") ~= nil
          or string.find(objString,"linen") ~= nil
-         or string.find(objString,"twill") ~= nil) then
+         or string.find(objString,"twill ") ~= nil) then
         eqcol = "#FFE4C4"
     elseif (string.find(objString,"silk") ~= nil
          or string.find(objString,"samite") ~= nil
@@ -360,10 +379,10 @@ function get256ColorFromObject(objectString, default)
         eqcol = "white"
 
     -- dark wood
-    elseif (string.find(objString,"wood") ~= nil    -- Cherrywood, Beechwood, Redwood, Applewood, Silverwood
+    elseif (string.find(objString,"wood ") ~= nil    -- Cherrywood, Beechwood, Redwood, Applewood, Silverwood
          or string.find(objString,"yew") ~= nil
          or string.find(objString,"teak") ~= nil
-         or string.find(objString,"elm") ~= nil
+         or string.find(objString," elm ") ~= nil
          or string.find(objString,"sycamore") ~= nil
          or string.find(objString,"mesquite") ~= nil
          or string.find(objString,"walnut") ~= nil
@@ -372,7 +391,7 @@ function get256ColorFromObject(objectString, default)
          or string.find(objString,"poplar") ~= nil
          or string.find(objString,"osage") ~= nil
          or string.find(objString,"ebony") ~= nil
-         or string.find(objString,"oak") ~= nil) then
+         or string.find(objString," oak") ~= nil) then
         eqcol = "#894821"
 
     -- light wood
@@ -396,13 +415,13 @@ function get256ColorFromObject(objectString, default)
         eqcol = "cornflowerblue"
     elseif (string.find(objString,"cmerald") ~= nil) then
         eqcol = "springgreen"
-    elseif (string.find(objString,"agate") ~= nil) then
+    elseif (string.find(objString," agate") ~= nil) then
         eqcol = "#FF80C0"
     elseif (string.find(objString,"diamond") ~= nil) then
         eqcol = "lightcyan"
-    elseif (string.find(objString,"pearl") ~= nil) then
+    elseif (string.find(objString,"pearl ") ~= nil) then
         eqcol = "palegoldenrod"
-    elseif (string.find(objString,"opal") ~= nil) then
+    elseif (string.find(objString," opal") ~= nil) then
         eqcol = "#48D1CC"
     elseif (string.find(objString,"amethyst") ~= nil) then
         eqcol = "#BA55D3"
@@ -420,7 +439,7 @@ function get256ColorFromObject(objectString, default)
         eqcol = "#7FFF00"
     elseif (string.find(objString,"quartz") ~= nil) then
         eqcol = "#FAFAD2"
-    elseif (string.find(objString,"lapis") ~= nil) then
+    elseif (string.find(objString," lapis ") ~= nil) then
         eqcol = "#4169E1"
     elseif (string.find(objString,"bloodstone") ~= nil) then
         eqcol = "red"
@@ -433,10 +452,10 @@ function get256ColorFromObject(objectString, default)
     elseif (string.find(objString,"citrine") ~= nil) then
         eqcol = "#FFA500"
     elseif (string.find(objString,"jade") ~= nil) then
-        eqcol = "#8DBC8F"
+        eqcol = "#40FF40"
 
     -- Stone and Bone
-    elseif (string.find(objString,"bone") ~= nil
+    elseif (string.find(objString," bone") ~= nil
          or string.find(objString,"ivory") ~= nil
          or string.find(objString,"limestone") ~= nil
          or string.find(objString,"marble") ~= nil) then
@@ -449,12 +468,12 @@ function get256ColorFromObject(objectString, default)
          or string.find(objString,"porcelain") ~= nil) then
         eqcol = "#EEE8AA"
 
-    elseif (string.find(objString,"stone") ~= nil) then
+    elseif (string.find(objString," stone ") ~= nil) then
         eqcol = "#808080"
     elseif (string.find(objString,"dragonbane") ~= nil) then
         eqcol = "goldenrod"
 
-    elseif (string.find(objString,"shale") ~= nil
+    elseif (string.find(objString," shale") ~= nil
          or string.find(objString,"basalt") ~= nil
          or string.find(objString,"soapstone") ~= nil
          or string.find(objString,"flint") ~= nil) then
@@ -462,7 +481,7 @@ function get256ColorFromObject(objectString, default)
     elseif (string.find(objString,"coal") ~= nil
          or string.find(objString,"obsidian") ~= nil) then
         eqcol = "dimgray"
-    elseif (string.find(objString,"clay") ~= nil) then
+    elseif (string.find(objString," clay ") ~= nil) then
         eqcol = "brown"
 
     -- Fruit
@@ -524,8 +543,9 @@ function get256ColorFromObject(objectString, default)
          or string.find(objString,"potatoes") ~= nil) then
         eqcol = "#B8860B"
 
+    -- These are the broad categories of resources that I've left out:
     -- Meat... yeah, we'll leave that as whatever the player chose.
-    -- Spices, herbs, & grain...
+    -- Spices, herbs, & grain... (except "herbs")
     -- Misc. Food & Drink...
     -- Misc. Resources (vellum, paper, etc)
 
@@ -597,10 +617,10 @@ function colorfyInRoomObjects(rName, rLine, rWildcards, rStyles)
 
     -- Get the colors
     local style = rStyles[1]
-    local roomCol = name_colours[style.textcolour]
-    local defaultObjectCol = name_colours[style.textcolour]
+    local roomCol = name_colours[style.textcolour] or "white"
+    local defaultObjectCol = name_colours[style.textcolour] or "white"
     if (rStyles[2] ~= nil) then
-        defaultObjectCol = name_colours[rStyles[2].textcolour]
+        defaultObjectCol = name_colours[rStyles[2].textcolour] or "white"
     end
 
     local PATTERN = " You notice "
@@ -690,7 +710,7 @@ function GrabInvItem(rName, rLine, rWildcards, rStyles)
         style = rStyles[2]
     end
 
-    eqcol = get256ColorFromObject(rLine, name_colours[style.textcolour])
+    eqcol = get256ColorFromObject(rLine, name_colours[style.textcolour] or "white")
 
     ColourNote(eqcol,"",rLine)
 
